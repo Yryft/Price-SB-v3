@@ -5,7 +5,7 @@ from ingest.bazaar import process_bazaar_snapshot
 from ingest.elections import process_elections
 from ingest.firesales import process_firesales
 
-POLL_INTERVAL = 300 # seconds
+POLL_INTERVAL = 1200 # seconds
 
 def run_once():
     # call each ingest module
