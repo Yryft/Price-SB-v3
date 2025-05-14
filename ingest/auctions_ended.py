@@ -28,6 +28,8 @@ def process_ended_auctions():
     sales_counts: Dict[str, int] = {}
     for a in ended:
         try:
+            if not a.get('bin'):
+                continue
             if not a.get('item_bytes'):
                 auctions_ended_logger.warning(f"No item_bytes for auction {a['auction_id']}, skipping")
                 continue
@@ -36,11 +38,13 @@ def process_ended_auctions():
             if product_id == 'Unknown':
                 auctions_ended_logger.warning(f"Unknown item for ended auction {a['auction_id']}")
             sales_counts[product_id] = sales_counts.get(product_id, 0) + 1
-            a.pop('item_bytes', None)
-            a.pop('coop', None)
-            a.pop('start', None)
-            a.pop('end', None)
+            
             a['data'] = product_data
+            
+            [a.pop(k, None) for k in ('bin','coop','start','end','bids','item_lore','last_updated','highest_bid_amount','claimed_bidders')]
+            [a['data'].pop(k, None) for k in ('id','Count','Damage')]
+            [a['data'].get('tag',{}).pop(k, None) for k in ('Unbreakable','HideFlags')]
+            
             session.merge(AuctionsSold(product_id=product_id, timestamp=datetime.fromtimestamp(a['timestamp'] / 1000, timezone.utc), data=a))
             auctions_ended_logger.info(f"Stored auction {a['auction_id']} item={product_id}")
         except Exception:

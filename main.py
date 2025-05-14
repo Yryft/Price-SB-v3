@@ -1,4 +1,5 @@
 import time
+from utils.logging import logging
 from ingest.auctions_ended import process_ended_auctions
 from ingest.auctions_lb import process_auctions_lb
 from ingest.bazaar import process_bazaar_snapshot
@@ -15,4 +16,4 @@ def run_once():
 
 if __name__ == '__main__':
     run_once()
-    print("Sleeping for 20 minutes...")
+    logging.info("Sleeping for 20 minutes...")

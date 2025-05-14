@@ -15,8 +15,7 @@ from utils.decode import resolve_name
 MAX_WORKERS   = 10
 AUCTIONS_API  = "https://api.hypixel.net/v2/skyblock/auctions"
 
-auction_lb_logger = get_logger('auction', 'auctions.log')
-
+auction_lb_logger = get_logger('auction', 'auctions_lb.log')
 
 def fetch_json(url: str, params: Dict[str, Any] = None) -> Any:
     session = requests.Session()
@@ -31,6 +30,7 @@ def fetch_json(url: str, params: Dict[str, Any] = None) -> Any:
 
 
 def fetch_all_auctions() -> List[Dict[str, Any]]:
+    auction_lb_logger.info("Fetching all auctions...\n")
     first = fetch_json(AUCTIONS_API, {'page': 0})
     total = first.get('totalPages', 0)
     auction_lb_logger.info(f"Total pages: {total}")
@@ -55,6 +55,8 @@ def _process_one(a: Dict[str, Any]) -> Optional[Tuple[str, float, Dict[str, Any]
         return None
 
     raw = a.pop('item_bytes', None)
+    
+
     if raw is None:
         return None
 
@@ -68,10 +70,14 @@ def _process_one(a: Dict[str, Any]) -> Optional[Tuple[str, float, Dict[str, Any]
 
     # attach decoded data
     a['data'] = decoded
+    [a.pop(k, None) for k in ('bin','coop','start','end','bids','item_lore','last_updated','highest_bid_amount','claimed_bidders')]
+    [a['data'].pop(k, None) for k in ('id','Count','Damage')]
+    [a['data'].get('tag',{}).pop(k, None) for k in ('Unbreakable','HideFlags')]
     return product_id, price, a
 
 
 def process_auctions_lb():
+    auction_lb_logger.info("Processing auctions LB...")
     try:
         all_auctions = fetch_all_auctions()
 
