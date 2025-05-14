@@ -37,6 +37,9 @@ def process_ended_auctions():
                 auctions_ended_logger.warning(f"Unknown item for ended auction {a['auction_id']}")
             sales_counts[product_id] = sales_counts.get(product_id, 0) + 1
             a.pop('item_bytes', None)
+            a.pop('coop', None)
+            a.pop('start', None)
+            a.pop('end', None)
             a['data'] = product_data
             session.merge(AuctionsSold(product_id=product_id, timestamp=datetime.fromtimestamp(a['timestamp'] / 1000, timezone.utc), data=a))
             auctions_ended_logger.info(f"Stored auction {a['auction_id']} item={product_id}")

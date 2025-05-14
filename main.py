@@ -5,8 +5,6 @@ from ingest.bazaar import process_bazaar_snapshot
 from ingest.elections import process_elections
 from ingest.firesales import process_firesales
 
-POLL_INTERVAL = 1200 # seconds
-
 def run_once():
     # call each ingest module
     process_ended_auctions()
@@ -16,6 +14,5 @@ def run_once():
     process_elections()
 
 if __name__ == '__main__':
-    while True:
-        run_once()
-        time.sleep(POLL_INTERVAL)
+    run_once()
+    print("Sleeping for 20 minutes...")
