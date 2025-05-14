@@ -41,7 +41,7 @@ def process_ended_auctions():
             
             a['data'] = product_data
             
-            [a.pop(k, None) for k in ('bin','coop','start','end','bids','item_lore','last_updated','highest_bid_amount','claimed_bidders')]
+            [a.pop(k, None) for k in ('extra','bin','coop','start','end','bids','item_lore','last_updated','highest_bid_amount','claimed_bidders')]
             [a['data'].pop(k, None) for k in ('id','Count','Damage')]
             [a['data'].get('tag',{}).pop(k, None) for k in ('Unbreakable','HideFlags')]
             

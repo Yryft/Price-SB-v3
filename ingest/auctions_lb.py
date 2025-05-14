@@ -70,7 +70,7 @@ def _process_one(a: Dict[str, Any]) -> Optional[Tuple[str, float, Dict[str, Any]
 
     # attach decoded data
     a['data'] = decoded
-    [a.pop(k, None) for k in ('bin','coop','start','end','bids','item_lore','last_updated','highest_bid_amount','claimed_bidders')]
+    [a.pop(k, None) for k in ('extra','bin','coop','start','end','bids','item_lore','last_updated','highest_bid_amount','claimed_bidders')]
     [a['data'].pop(k, None) for k in ('id','Count','Damage')]
     [a['data'].get('tag',{}).pop(k, None) for k in ('Unbreakable','HideFlags')]
     return product_id, price, a
