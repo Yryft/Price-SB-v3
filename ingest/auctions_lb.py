@@ -72,7 +72,6 @@ def _process_one(a: Dict[str, Any]) -> Optional[Tuple[str, float, Dict[str, Any]
 
 
 def process_auctions_lb():
-    session: Session = SessionLocal()
     try:
         all_auctions = fetch_all_auctions()
 
@@ -93,7 +92,7 @@ def process_auctions_lb():
                 lowest[pid] = (price, clean)
 
         auction_lb_logger.info(f"Keeping {len(lowest)} lowest‐BIN auctions")
-
+        session: Session = SessionLocal()
         # 3) Upsert winners
         for pid, (_, auction_dict) in lowest.items():
             lb = AuctionsLB(
