@@ -54,13 +54,13 @@ def _process_one(a: Dict[str, Any]) -> Optional[Tuple[str, float, Dict[str, Any]
     if not a.get('bin'):
         return None
 
-    raw = a.pop('item_bytes', None)
+    item_bytes = a.pop('item_bytes', None)
     
 
-    if raw is None:
+    if item_bytes is None:
         return None
 
-    product_id, decoded = resolve_name(raw)
+    product_id, decoded = resolve_name(item_bytes)
     if product_id == 'Unknown':
         return None
 
@@ -72,7 +72,7 @@ def _process_one(a: Dict[str, Any]) -> Optional[Tuple[str, float, Dict[str, Any]
     a['data'] = decoded
     [a.pop(k, None) for k in ('extra','bin','coop','start','end','bids','item_lore','last_updated','highest_bid_amount','claimed_bidders')]
     [a['data'].pop(k, None) for k in ('id','Count','Damage')]
-    [a['data'].get('tag',{}).pop(k, None) for k in ('Unbreakable','HideFlags')]
+    [a['data'].get('tag',{}).pop(k, None) for k in ('ench','SkullOwner','Unbreakable','HideFlags')]
     return product_id, price, a
 
 

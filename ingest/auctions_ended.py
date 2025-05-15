@@ -33,7 +33,11 @@ def process_ended_auctions():
             if not a.get('item_bytes'):
                 auctions_ended_logger.warning(f"No item_bytes for auction {a['auction_id']}, skipping")
                 continue
-            product_id, product_data = resolve_name(a)
+            
+            item_bytes = a.pop('item_bytes', None)
+            
+            product_id, product_data = resolve_name(item_bytes)
+            
             auctions_ended_logger.debug(f"Resolved auction item: {product_id}")
             if product_id == 'Unknown':
                 auctions_ended_logger.warning(f"Unknown item for ended auction {a['auction_id']}")
@@ -43,7 +47,7 @@ def process_ended_auctions():
             
             [a.pop(k, None) for k in ('extra','bin','coop','start','end','bids','item_lore','last_updated','highest_bid_amount','claimed_bidders')]
             [a['data'].pop(k, None) for k in ('id','Count','Damage')]
-            [a['data'].get('tag',{}).pop(k, None) for k in ('Unbreakable','HideFlags')]
+            [a['data'].get('tag',{}).pop(k, None) for k in ('ench','SkullOwner','Unbreakable','HideFlags')]
             
             session.merge(AuctionsSold(product_id=product_id, timestamp=datetime.fromtimestamp(a['timestamp'] / 1000, timezone.utc), data=a))
             auctions_ended_logger.info(f"Stored auction {a['auction_id']} item={product_id}")
