@@ -55,7 +55,7 @@ def process_ended_auctions():
             auctions_ended_logger.exception(f"Error processing ended auction {a.get('auction_id')}")
     session.flush()
     try:
-        session.bulk_insert_mappings(ItemSale, [{'item_id': i, 'count': c, 'timestamp': now} for i,c in sales_counts.items()])
+        session.bulk_insert_mappings(ItemSale, [{'item_id': i, 'count': c, 'timestamp': now} for i,c in sales_counts.items()]) # type: ignore
         auctions_ended_logger.info(f"Inserted ItemSale entries: {sales_counts}")
     except:
         auctions_ended_logger.exception("Failed bulk insert ItemSale")

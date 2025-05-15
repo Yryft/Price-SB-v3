@@ -17,7 +17,7 @@ AUCTIONS_API  = "https://api.hypixel.net/v2/skyblock/auctions"
 
 auction_lb_logger = get_logger('auction', 'auctions_lb.log')
 
-def fetch_json(url: str, params: Dict[str, Any] = None) -> Any:
+def fetch_json(url: str, params: Dict[str, Any] = None) -> Any: # type: ignore
     session = requests.Session()
     try:
         resp = session.get(url, params=params)
@@ -71,8 +71,8 @@ def _process_one(a: Dict[str, Any]) -> Optional[Tuple[str, float, Dict[str, Any]
     # attach decoded data
     a['data'] = decoded
     [a.pop(k, None) for k in ('extra','bin','coop','start','end','bids','item_lore','last_updated','highest_bid_amount','claimed_bidders')]
-    [a['data'].pop(k, None) for k in ('id','Count','Damage')]
-    [a['data'].get('tag',{}).pop(k, None) for k in ('ench','SkullOwner','Unbreakable','HideFlags')]
+    [a['data'].pop(k, None) for k in ('id','Count','Damage')] # type: ignore
+    [a['data'].get('tag',{}).pop(k, None) for k in ('ench','SkullOwner','Unbreakable','HideFlags')] # type: ignore
     return product_id, price, a
 
 
@@ -113,4 +113,4 @@ def process_auctions_lb():
     except Exception:
         auction_lb_logger.exception("Error processing auctions_lb")
     finally:
-        session.close()
+        session.close() # type: ignore
