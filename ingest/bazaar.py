@@ -3,7 +3,7 @@ from typing import Dict
 from datetime import datetime, timezone
 from sqlalchemy import update
 from db.session import SessionLocal
-from db.models import Bazaar, ItemSale
+from db.models import Bazaar
 from utils.logging import get_logger
 from utils.decode import resolve_name
 
