@@ -26,6 +26,7 @@ def process_bazaar_snapshot():
             products = {}
         baz_entries=[]
         for pid,info in products.items():
+            info['quick_status']['sellPrice'] = info['sell_summary'][0]['pricePerUnit']
             try:
                 baz_entries.append({'product_id': pid, 'timestamp': now, 'data': info['quick_status']})
                 bazaar_logger.info(f"Added bazaar product {pid}")
