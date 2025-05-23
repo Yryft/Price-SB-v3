@@ -26,12 +26,12 @@ def process_bazaar_snapshot():
             products = {}
         baz_entries=[]
         for pid,info in products.items():
-            info['quick_status']['sellPrice'] = info['sell_summary'][0]['pricePerUnit']
             try:
+                info['quick_status']['sellPrice'] = info['sell_summary'][0]['pricePerUnit']
                 baz_entries.append({'product_id': pid, 'timestamp': now, 'data': info['quick_status']})
                 bazaar_logger.info(f"Added bazaar product {pid}")
-            except:
-                bazaar_logger.exception(f"Error processing bazaar entry {pid}")
+            except Exception as e:
+                bazaar_logger.exception(f"Error processing bazaar entry {pid}, {e}")
         try:
             session.bulk_insert_mappings(Bazaar, baz_entries)
         except:
