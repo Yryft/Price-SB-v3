@@ -27,7 +27,14 @@ def process_bazaar_snapshot():
         baz_entries=[]
         for pid,info in products.items():
             try:
-                info['quick_status']['sellPrice'] = info['sell_summary'][0]['pricePerUnit']
+                try:
+                    info['quick_status']['sellPrice'] = info['sell_summary'][0]['pricePerUnit']
+                except:
+                    info['quick_status']['sellPrice'] = 0
+                try:
+                    info['quick_status']['buyPrice'] = info['buy_summary'][0]['pricePerUnit']
+                except:
+                    info['quick_status']['buyPrice'] = 0
                 baz_entries.append({'product_id': pid, 'timestamp': now, 'data': info['quick_status']})
                 bazaar_logger.info(f"Added bazaar product {pid}")
             except Exception as e:
